@@ -1,0 +1,44 @@
+---
+title: "Indivual project"
+author: "Wenhan"
+date: '2022-04-15'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##1Create an r-script to scrape the links from the left navigation menu of the book website. (IP1)
+library(rvest)
+page <- read_html("https://rafalab.github.io/dsbook/)")
+nav <- html_nodes(page, "nav")
+urls <- html_attr(links, "href")
+urls[1] <- ""
+urls <- paste0("https://rafalab.github.io/dsbook/)")
+head(urls)
+
+##2. Create an r-script to scrape the content from each single page of the book using the navigation links acquired from step 1. (IP2)
+```{r}
+getContent <- function(url){
+  page = read_html(url)
+  div = html_node(page, "div.page-inner")
+  content <- html_text(div)
+  content
+}
+getContent(urls[1])
+```
+
+##3```{r}
+text <- c()
+for(i in 1:length(urls)){
+  content <- getContent(urls[i])
+  text <- paste(text, content)
+}
+substr(text, 1, 100)
+```
+
+```{r}
+writeLines(text, file("Irizarry"))
+```
+
